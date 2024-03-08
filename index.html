@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moomin walking</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        body{
+            background-image: url(./images2/road.jpeg);
+        }
+
+        div{
+            width: 100%;
+            height: 100%;
+            background-color: aqua;
+            position: relative;
+            /* border: 1px solid red;
+            margin: 10px;
+            height: 30px; */
+        }
+        #moomin{
+            width: 300px;
+            position: absolute;
+            left: 0;
+            top: 450px;
+        }
+
+        .bird{
+            width: 300px;
+            
+            position: absolute;
+            left: 0;
+            top: 250px;
+        }
+    </style>
+</head>
+<body>
+    <img src="./images2/bird1.png" alt="" class="bird" id="bird1">
+    <img src="./images2/bird1.png" alt="" class="bird" id="bird2">
+    <div>
+        <img  src ="./images2/moomin1.png" id="moomin">
+    </div>
+    <button id="btnStop" onclick="toggle()">Stop Me!</button>
+    <button id="btnFast" onclick="runFaster()">Make Me Run!</button>
+    <button id="btnSlow" onclick="runSlower()">Slow Me Down!</button>
+
+    <script>
+        let images = ["moomin1.png", "moomin2.png", "moomin3.png", "moomin4.png", "moomin5.png", "moomin6.png", 
+        "moomin7.png"]
+
+        let birds = ["bird1.png", "bird2.png", "bird3.png", "bird4.png", "bird5.png", "bird6.png", 
+        "bird7.png", "bird8.png", "bird9.png", "bird10.png"]
+        let current = 0;
+        let position = 0;
+        let timeValue = 100;
+
+        function nextStep(){
+            position = (position + 8) % $("div").width();
+            $("#moomin").css('left', position + 'px');
+            // console.log($("#moomin").css('left'))
+            $("#moomin").attr("src", `./images2/${images[current]}`);
+            current = (current + 1) % images.length;
+        }
+        let timerID = setInterval(nextStep,timeValue);
+        let move = true;
+
+        function toggle(){
+            // console.log('move',move);
+            
+            if (move){
+                clearInterval(timerID);            
+                $('#btnStop').html('Resume');
+                move = false;
+            } else{
+                clearInterval(timerID)
+                timerID = setInterval(nextStep,timeValue);
+                console.log("Else")
+                $('#btnStop').html('Stop Me!');
+                move = true;
+            }
+            // console.log('move afterif',move, timer2);
+        }
+
+        function runFaster(){
+            timeValue -= 50;
+            clearInterval(timerID);
+            timerID = setInterval(nextStep,timeValue);
+
+            $('#btnStop').html('Stop Me!');
+            move = true;
+
+        }
+
+        function runSlower(){
+            timeValue += 50;
+            clearInterval(timerID);
+            timerID = setInterval(nextStep,timeValue);
+            $('#btnStop').html('Stop Me!');
+            move = true;
+        }
+
+        let birdLeft = 0;
+        let birdTop = 250;
+        let reachedTop = false;
+        let currentBird1 = 0;
+
+        function flyBird1(){
+            birdTop = reachedTop ? (birdTop + 5) % 250 : (birdTop -5) %250;
+            birdLeft = (birdLeft + 10) % $("div").width();
+            if(birdTop==0){
+                reachedTop =true;
+            }
+            $("#bird1").attr("src", `./images2/${birds[currentBird1]}`);
+            currentBird1 = (currentBird1 + 1) % birds.length;
+            $("#bird1").css('left', birdLeft);
+            $("#bird1").css('top', birdTop);
+        }
+
+        setInterval(flyBird1, 100);
+
+        let birdLeft2 = 0;
+        let birdTop2 = 100;
+        let reachedTop2 = false;
+        let currentBird2 = 0;
+
+        function flyBird2(){
+            birdTop2 = reachedTop2 ? (birdTop2 + 5) % 250 : (birdTop2 -5) %250;
+            birdLeft2 = (birdLeft2 + 10) % $("div").width();
+            if(birdTop2==0){
+                reachedTop2 =true;
+            }
+            $("#bird2").attr("src", `./images2/${birds[currentBird2]}`);
+            currentBird2 = (currentBird2 + 1) % birds.length;
+            $("#bird2").css('left', birdLeft2);
+            $("#bird2").css('top', birdTop2);
+        }
+
+        setInterval(flyBird2, 200);
+
+
+
+
+        
+    </script>
+</body>
+</html>
